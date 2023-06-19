@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ProjectService {
-    Project newProject(Project project);
+    void newProject(Project project);
     Project updateProjectByUuid(UUID uuid, Project project);
     Project addNewTaskByUuid(UUID uuid, Task task);
     Project deleteATaskfromProjectByUuid(UUID uuid, Task task);

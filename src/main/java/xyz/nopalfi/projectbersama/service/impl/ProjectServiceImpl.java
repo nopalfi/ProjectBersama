@@ -24,11 +24,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project newProject(Project project) {
+    public void newProject(Project project) {
         Instant now = Instant.now();
         project.setProjectCreated(now);
         project.setProjectModified(now);
-        return repository.save(project);
+        repository.save(project);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ProjectServiceImpl implements ProjectService {
             oldProject.setIsDone(project.getIsDone());
             oldProject.setTeams(project.getTeams());
             return repository.save(oldProject);
-        }else {
+        } else {
             throw new UuidNotFoundException("Project: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND);
         }
     }

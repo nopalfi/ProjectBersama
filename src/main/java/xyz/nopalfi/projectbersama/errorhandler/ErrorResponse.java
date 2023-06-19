@@ -9,4 +9,5 @@ import org.springframework.http.HttpStatus;
 public class ErrorResponse {
     private String message;
     private HttpStatus httpStatus;
+    private long timestamp;
 }
