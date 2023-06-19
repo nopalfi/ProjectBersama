@@ -1,5 +1,7 @@
 package xyz.nopalfi.projectbersama.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,11 +26,13 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
     private String username;
+    @JsonIgnore
     private String password;
     private String firstName;
     private String secondName;
     private String email;
     @Enumerated(EnumType.STRING)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Role role;
 
     @Override

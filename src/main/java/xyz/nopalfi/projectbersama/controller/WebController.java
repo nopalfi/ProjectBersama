@@ -6,10 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import xyz.nopalfi.projectbersama.entity.User;
 import xyz.nopalfi.projectbersama.service.impl.UserServiceImpl;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/")
@@ -25,11 +22,6 @@ public class WebController {
     @GetMapping("/")
     public ResponseEntity<String> hello() {
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @GetMapping("/users")
-    public ResponseEntity<List<User>> usersList() {
-        return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
     }
 
 }

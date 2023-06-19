@@ -1,7 +1,10 @@
 package xyz.nopalfi.projectbersama.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.List;
@@ -13,19 +16,22 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Projects {
+public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
     @OneToMany
-    private List<Tasks> tasks;
-    @NonNull
+    private List<Task> tasks;
     private String title;
-    private String description;
+    @Builder.Default
+    private String description = "";
     private Instant projectCreated;
     private Instant projectModified;
     private Instant deadline;
+    @Builder.Default
+    private Boolean isDone = false;
 
     @ManyToMany
     private Set<Team> teams;
+
 }

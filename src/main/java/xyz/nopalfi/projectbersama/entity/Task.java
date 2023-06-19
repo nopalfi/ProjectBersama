@@ -14,14 +14,15 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 @Builder
-public class Tasks {
+public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
     private String task;
-    private Boolean isDone;
+    @Builder.Default
+    private Boolean isDone = false;
     private Instant taskCreated;
     private Instant taskModified;
-    @OneToOne
-    private User taskCreatedBy;
+    @ManyToOne
+    private User user;
 }

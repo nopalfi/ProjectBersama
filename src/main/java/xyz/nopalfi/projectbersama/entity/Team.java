@@ -1,7 +1,10 @@
 package xyz.nopalfi.projectbersama.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 import java.util.UUID;
@@ -17,10 +20,9 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
     @OneToMany
-    private Set<User> user;
-    @NonNull
-    private UUID projectUuid;
-    @NonNull
+    private Set<User> users;
+    @OneToMany
+    private Set<Project> projects;
     @OneToOne
-    private User projectOwner;
+    private User teamOwner;
 }
