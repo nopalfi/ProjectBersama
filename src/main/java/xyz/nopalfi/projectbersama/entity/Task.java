@@ -23,6 +23,8 @@ public class Task {
     private Boolean isDone = false;
     private Instant taskCreated;
     private Instant taskModified;
+    @Builder.Default
+    private Instant deadline = Instant.now().plusSeconds(86400);
     @ManyToOne
-    private User user;
+    private User owner;
 }

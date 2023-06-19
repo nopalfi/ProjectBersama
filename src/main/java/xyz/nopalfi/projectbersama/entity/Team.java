@@ -21,8 +21,6 @@ public class Team {
     private UUID uuid;
     @OneToMany
     private Set<User> users;
-    @OneToMany
-    private Set<Project> projects;
     @OneToOne
     private User teamOwner;
 }

@@ -1,6 +1,5 @@
 package xyz.nopalfi.projectbersama.service;
 
-import xyz.nopalfi.projectbersama.entity.Project;
 import xyz.nopalfi.projectbersama.entity.Team;
 import xyz.nopalfi.projectbersama.entity.User;
 
@@ -13,7 +12,6 @@ public interface TeamService {
     List<Team> getAllTeams();
     Team newTeam(Team team);
     Set<User> getAllUsersInTeamUuid(UUID uuid);
-    Set<Project> getAllProjectsInTeamUuid(UUID uuid);
     User getUserTeamOwnerUuid(UUID uuid);
 
 }

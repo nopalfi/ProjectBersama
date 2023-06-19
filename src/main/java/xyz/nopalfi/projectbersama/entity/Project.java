@@ -30,8 +30,18 @@ public class Project {
     private Instant deadline;
     @Builder.Default
     private Boolean isDone = false;
+    @OneToOne
+    private User owner;
 
     @ManyToMany
     private Set<Team> teams;
+
+    public void addTask(Task task) {
+        tasks.add(task);
+    }
+
+    public void deleteTask(Task task) {
+        tasks.remove(task);
+    }
 
 }

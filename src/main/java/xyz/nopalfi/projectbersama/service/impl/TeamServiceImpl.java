@@ -3,7 +3,6 @@ package xyz.nopalfi.projectbersama.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import xyz.nopalfi.projectbersama.entity.Project;
 import xyz.nopalfi.projectbersama.entity.Team;
 import xyz.nopalfi.projectbersama.entity.User;
 import xyz.nopalfi.projectbersama.errorhandler.UuidNotFoundException;
@@ -38,12 +37,6 @@ public class TeamServiceImpl implements TeamService {
     public Set<User> getAllUsersInTeamUuid(UUID uuid) {
         Team team = repository.findByUuid(uuid).orElseThrow(() -> new UuidNotFoundException("Team with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND));
         return team.getUsers();
-    }
-
-    @Override
-    public Set<Project> getAllProjectsInTeamUuid(UUID uuid) {
-        Team team = repository.findByUuid(uuid).orElseThrow(() -> new UuidNotFoundException("Team with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND));
-        return team.getProjects();
     }
 
     @Override

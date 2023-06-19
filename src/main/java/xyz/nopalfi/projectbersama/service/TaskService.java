@@ -9,12 +9,16 @@ import java.util.UUID;
 
 public interface TaskService {
 
+    List<Task> getAll();
     Task newTask(Task task);
+    Task updateTaskByUuid(UUID uuid, Task task);
+    void deleteTaskByUuid(UUID uuid);
     List<Task> getTasksByProjectUuid(UUID uuid);
-    List<Task> getTasksByUser(User user);
+    List<Task> getTasksByOwner(User user);
     Task getTaskByUuid(UUID uuid);
     Boolean getIsTaskDoneByUuid(UUID uuid);
     Instant getCreatedAtInstantByUuid(UUID uuid);
     Instant getModifiedInstantByUuid(UUID uuid);
+    Instant getDeadlineByUuid(UUID uuid);
 
 }

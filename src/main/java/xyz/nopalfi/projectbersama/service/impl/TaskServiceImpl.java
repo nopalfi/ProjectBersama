@@ -28,10 +28,41 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
+    public List<Task> getAll() {
+        return repository.findAll();
+    }
+
+    @Override
     public Task newTask(Task task) {
-        task.setTaskCreated(Instant.now());
-        task.setTaskModified(Instant.now());
+        Instant now = Instant.now();
+        task.setTaskCreated(now);
+        task.setTaskModified(now);
         return repository.save(task);
+    }
+
+    @Override
+    public Task updateTaskByUuid(UUID uuid, Task task) {
+        if (repository.findByUuid(uuid).isPresent()) {
+            Task oldTask = repository.findByUuid(uuid).get();
+            oldTask.setTask(task.getTask());
+            oldTask.setTaskModified(Instant.now());
+            oldTask.setOwner(task.getOwner());
+            oldTask.setDeadline(task.getDeadline());
+            oldTask.setIsDone(task.getIsDone());
+            return repository.save(oldTask);
+        } else {
+            throw new UuidNotFoundException("Task with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Override
+    public void deleteTaskByUuid(UUID uuid) {
+        if (repository.findByUuid(uuid).isPresent()) {
+            Task task = repository.findByUuid(uuid).get();
+            repository.delete(task);
+        } else {
+            throw new UuidNotFoundException("Task with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND);
+        }
     }
 
     @Override
@@ -41,8 +72,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getTasksByUser(User user) {
-        return repository.findByUser(user);
+    public List<Task> getTasksByOwner(User user) {
+        return repository.findByOwner(user);
     }
 
     @Override
@@ -80,4 +111,15 @@ public class TaskServiceImpl implements TaskService {
             throw new UuidNotFoundException("Task with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND);
         }
     }
+
+    @Override
+    public Instant getDeadlineByUuid(UUID uuid) {
+        if (repository.findByUuid(uuid).isPresent()) {
+            return repository.findByUuid(uuid).get().getDeadline();
+        } else {
+            throw new UuidNotFoundException("Task with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+
 }

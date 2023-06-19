@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import xyz.nopalfi.projectbersama.entity.Project;
+import xyz.nopalfi.projectbersama.entity.Task;
 import xyz.nopalfi.projectbersama.errorhandler.UuidNotFoundException;
 import xyz.nopalfi.projectbersama.repository.ProjectRepository;
 import xyz.nopalfi.projectbersama.service.ProjectService;
@@ -24,7 +25,58 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project newProject(Project project) {
+        Instant now = Instant.now();
+        project.setProjectCreated(now);
+        project.setProjectModified(now);
         return repository.save(project);
+    }
+
+    @Override
+    public Project updateProjectByUuid(UUID uuid, Project project) {
+        if (repository.getByUuid(uuid).isPresent()) {
+            Project oldProject = repository.getByUuid(uuid).get();
+            oldProject.setProjectModified(Instant.now());
+            oldProject.setTitle(project.getTitle());
+            oldProject.setDescription(project.getDescription());
+            oldProject.setTasks(project.getTasks());
+            oldProject.setIsDone(project.getIsDone());
+            oldProject.setTeams(project.getTeams());
+            return repository.save(oldProject);
+        }else {
+            throw new UuidNotFoundException("Project: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Override
+    public Project addNewTaskByUuid(UUID uuid, Task task) {
+        if (repository.getByUuid(uuid).isPresent()) {
+            Project project = repository.getByUuid(uuid).get();
+            project.addTask(task);
+            return repository.save(project);
+        }else {
+            throw new UuidNotFoundException("Project: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Override
+    public Project deleteATaskfromProjectByUuid(UUID uuid, Task task) {
+        if (repository.getByUuid(uuid).isPresent()) {
+            Project project = repository.getByUuid(uuid).get();
+            project.deleteTask(task);
+            return repository.save(project);
+        }else {
+            throw new UuidNotFoundException("Project: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Override
+    public void deleteProjectByUuid(UUID uuid) {
+        if (repository.getByUuid(uuid).isPresent()) {
+            Project project = repository.getByUuid(uuid).get();
+            repository.delete(project);
+        }else {
+            throw new UuidNotFoundException("Project: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND);
+        }
     }
 
     @Override
