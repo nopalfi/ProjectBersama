@@ -9,17 +9,12 @@ import java.util.UUID;
 
 public interface ProjectService {
     void newProject(Project project);
-    Project updateProjectByUuid(UUID uuid, Project project);
+    void updateProjectByUuid(UUID uuid, Project project);
+    void updateIsDoneProjectByUuid(UUID uuid, Project project, Boolean isDone);
     Project addNewTaskByUuid(UUID uuid, Task task);
-    Project deleteATaskfromProjectByUuid(UUID uuid, Task task);
+    Project deleteATaskfromProjectByUuid(UUID projectUuid, UUID taskUuid);
     void deleteProjectByUuid(UUID uuid);
     List<Project> getAllProject();
     Project getProjectByUuid(UUID uuid);
-    String getProjectTitleByUuid(UUID uuid);
-    String getProjectDescriptionByUuid(UUID uuid);
-    Boolean getProjectIsDoneByUuid(UUID uuid);
-    Instant getProjectCreatedInstantByUuid(UUID uuid);
-    Instant getProjectModifiedInstantByUuid(UUID uuid);
-    Instant getProjectDeadlineInstantByUuid(UUID uuid);
 
 }

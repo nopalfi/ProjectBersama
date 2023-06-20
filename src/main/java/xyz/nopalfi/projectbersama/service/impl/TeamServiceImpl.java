@@ -10,7 +10,6 @@ import xyz.nopalfi.projectbersama.repository.TeamRepository;
 import xyz.nopalfi.projectbersama.service.TeamService;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -33,8 +32,9 @@ public class TeamServiceImpl implements TeamService {
         return repository.save(team);
     }
 
+
     @Override
-    public Set<User> getAllUsersInTeamUuid(UUID uuid) {
+    public List<User> getAllUsersInTeamUuid(UUID uuid) {
         Team team = repository.findByUuid(uuid).orElseThrow(() -> new UuidNotFoundException("Team with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND));
         return team.getUsers();
     }
@@ -43,5 +43,11 @@ public class TeamServiceImpl implements TeamService {
     public User getUserTeamOwnerUuid(UUID uuid) {
         Team team = repository.findByUuid(uuid).orElseThrow(() -> new UuidNotFoundException("Team with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND));
         return team.getTeamOwner();
+    }
+
+    @Override
+    public void deleteTeamByUuid(UUID uuid) {
+        Team team = repository.findByUuid(uuid).orElseThrow(() -> new UuidNotFoundException("Team with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND));
+        repository.delete(team);
     }
 }

@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -20,7 +20,7 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
     @OneToMany
-    private Set<User> users;
+    private List<User> users;
     @OneToOne
     private User teamOwner;
 }
