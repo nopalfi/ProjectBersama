@@ -8,6 +8,7 @@ import xyz.nopalfi.projectbersama.entity.Task;
 import xyz.nopalfi.projectbersama.entity.User;
 import xyz.nopalfi.projectbersama.errorhandler.UuidNotFoundException;
 import xyz.nopalfi.projectbersama.repository.TaskRepository;
+import xyz.nopalfi.projectbersama.repository.UserRepository;
 import xyz.nopalfi.projectbersama.service.TaskService;
 
 import java.time.Instant;
@@ -19,11 +20,13 @@ public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository repository;
     private final ProjectServiceImpl projectService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public TaskServiceImpl(TaskRepository repository, ProjectServiceImpl projectService) {
+    public TaskServiceImpl(TaskRepository repository, ProjectServiceImpl projectService, UserRepository userRepository) {
         this.repository = repository;
         this.projectService = projectService;
+        this.userRepository = userRepository;
     }
 
 
@@ -72,8 +75,13 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getTasksByOwner(User user) {
-        return repository.findByOwner(user);
+    public List<Task> getTasksByOwnerUuid(UUID uuid) {
+        if (userRepository.getByUuid(uuid).isPresent()) {
+            User user = userRepository.getByUuid(uuid).get();
+            return user.getTasks();
+        } else {
+            throw new UuidNotFoundException("Task with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND);
+        }
     }
 
     @Override
@@ -84,42 +92,5 @@ public class TaskServiceImpl implements TaskService {
             throw new UuidNotFoundException("Task with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND);
         }
     }
-
-    @Override
-    public Boolean getIsTaskDoneByUuid(UUID uuid) {
-        if (repository.findByUuid(uuid).isPresent()) {
-            return repository.findByUuid(uuid).get().getIsDone();
-        } else {
-            throw new UuidNotFoundException("Task with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @Override
-    public Instant getCreatedAtInstantByUuid(UUID uuid) {
-        if (repository.findByUuid(uuid).isPresent()) {
-            return repository.findByUuid(uuid).get().getTaskCreated();
-        } else {
-            throw new UuidNotFoundException("Task with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @Override
-    public Instant getModifiedInstantByUuid(UUID uuid) {
-        if (repository.findByUuid(uuid).isPresent()) {
-            return repository.findByUuid(uuid).get().getTaskModified();
-        } else {
-            throw new UuidNotFoundException("Task with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @Override
-    public Instant getDeadlineByUuid(UUID uuid) {
-        if (repository.findByUuid(uuid).isPresent()) {
-            return repository.findByUuid(uuid).get().getDeadline();
-        } else {
-            throw new UuidNotFoundException("Task with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND);
-        }
-    }
-
 
 }

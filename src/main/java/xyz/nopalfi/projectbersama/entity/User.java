@@ -33,8 +33,9 @@ public class User implements UserDetails {
     private String secondName;
     private String email;
     @Enumerated(EnumType.STRING)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Role role;
+    @OneToMany
+    private List<Task> tasks;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

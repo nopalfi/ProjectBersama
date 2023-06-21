@@ -28,11 +28,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getUsernameByUuid(UUID uuid) {
-        return repository.getReferenceById(uuid).getUsername();
-    }
-
-    @Override
     public User getUserByUuid(UUID uuid) {
         return repository.getByUuid(uuid).orElseThrow(() -> new UuidNotFoundException("UUID "+uuid.toString()+" not found", HttpStatus.NOT_FOUND));
     }
@@ -44,21 +39,5 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new UsernameNotFoundException("Username not found");
         }
-    }
-
-    @Override
-    public UUID getUuidByUsername(String username) {
-        User user = repository.getByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-        return user.getUuid();
-    }
-
-    @Override
-    public String getEmailByUsername(String username) {
-        return repository.getByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username not found")).getEmail();
-    }
-
-    @Override
-    public String getUsernameByEmail(String email) {
-        return repository.getByEmail(email).orElseThrow(() -> new RuntimeException("Email not found")).getUsername();
     }
 }

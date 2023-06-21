@@ -14,11 +14,7 @@ public interface TaskService {
     Task updateTaskByUuid(UUID uuid, Task task);
     void deleteTaskByUuid(UUID uuid);
     List<Task> getTasksByProjectUuid(UUID uuid);
-    List<Task> getTasksByOwner(User user);
+    List<Task> getTasksByOwnerUuid(UUID uuid);
     Task getTaskByUuid(UUID uuid);
-    Boolean getIsTaskDoneByUuid(UUID uuid);
-    Instant getCreatedAtInstantByUuid(UUID uuid);
-    Instant getModifiedInstantByUuid(UUID uuid);
-    Instant getDeadlineByUuid(UUID uuid);
 
 }
