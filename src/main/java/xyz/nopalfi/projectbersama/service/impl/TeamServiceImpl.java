@@ -8,9 +8,9 @@ import xyz.nopalfi.projectbersama.entity.User;
 import xyz.nopalfi.projectbersama.errorhandler.UuidNotFoundException;
 import xyz.nopalfi.projectbersama.repository.TeamRepository;
 import xyz.nopalfi.projectbersama.service.TeamService;
+import xyz.nopalfi.projectbersama.utils.UUIDConverter;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class TeamServiceImpl implements TeamService {
@@ -34,20 +34,20 @@ public class TeamServiceImpl implements TeamService {
 
 
     @Override
-    public List<User> getAllUsersInTeamUuid(UUID uuid) {
-        Team team = repository.findByUuid(uuid).orElseThrow(() -> new UuidNotFoundException("Team with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND));
+    public List<User> getAllUsersInTeamUuid(String uuid) {
+        Team team = repository.findByUuid(UUIDConverter.convert(uuid)).orElseThrow(() -> new UuidNotFoundException("Team with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND));
         return team.getUsers();
     }
 
     @Override
-    public User getUserTeamOwnerUuid(UUID uuid) {
-        Team team = repository.findByUuid(uuid).orElseThrow(() -> new UuidNotFoundException("Team with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND));
+    public User getUserTeamOwnerUuid(String uuid) {
+        Team team = repository.findByUuid(UUIDConverter.convert(uuid)).orElseThrow(() -> new UuidNotFoundException("Team with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND));
         return team.getTeamOwner();
     }
 
     @Override
-    public void deleteTeamByUuid(UUID uuid) {
-        Team team = repository.findByUuid(uuid).orElseThrow(() -> new UuidNotFoundException("Team with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND));
+    public void deleteTeamByUuid(String uuid) {
+        Team team = repository.findByUuid(UUIDConverter.convert(uuid)).orElseThrow(() -> new UuidNotFoundException("Team with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND));
         repository.delete(team);
     }
 }

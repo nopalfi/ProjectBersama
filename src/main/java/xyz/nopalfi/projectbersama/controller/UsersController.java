@@ -11,7 +11,6 @@ import xyz.nopalfi.projectbersama.entity.User;
 import xyz.nopalfi.projectbersama.service.impl.UserServiceImpl;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/users/")
@@ -29,9 +28,9 @@ public class UsersController {
         return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
     }
 
-    @GetMapping("/user/uuid/{uuid}")
+    @GetMapping("/user/{uuid}")
     public ResponseEntity<User> getUserByUUid(@PathVariable String uuid) {
-        return new ResponseEntity<>(userService.getUserByUuid(UUID.fromString(uuid)), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getUserByUuid(uuid), HttpStatus.OK);
     }
 
     @GetMapping("/user/username/{username}")

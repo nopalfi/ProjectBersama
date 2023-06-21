@@ -8,9 +8,9 @@ import xyz.nopalfi.projectbersama.entity.User;
 import xyz.nopalfi.projectbersama.errorhandler.UuidNotFoundException;
 import xyz.nopalfi.projectbersama.repository.UserRepository;
 import xyz.nopalfi.projectbersama.service.UserService;
+import xyz.nopalfi.projectbersama.utils.UUIDConverter;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -28,8 +28,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByUuid(UUID uuid) {
-        return repository.getByUuid(uuid).orElseThrow(() -> new UuidNotFoundException("UUID "+uuid.toString()+" not found", HttpStatus.NOT_FOUND));
+    public User getUserByUuid(String uuid) {
+        return repository.getByUuid(UUIDConverter.convert(uuid)).orElseThrow(() -> new UuidNotFoundException("UUID "+uuid+" not found", HttpStatus.NOT_FOUND));
     }
 
     @Override

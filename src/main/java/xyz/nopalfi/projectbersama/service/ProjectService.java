@@ -3,18 +3,16 @@ package xyz.nopalfi.projectbersama.service;
 import xyz.nopalfi.projectbersama.entity.Project;
 import xyz.nopalfi.projectbersama.entity.Task;
 
-import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
 
 public interface ProjectService {
     void newProject(Project project);
-    void updateProjectByUuid(UUID uuid, Project project);
-    void updateIsDoneProjectByUuid(UUID uuid, Project project, Boolean isDone);
-    Project addNewTaskByUuid(UUID uuid, Task task);
-    Project deleteATaskfromProjectByUuid(UUID projectUuid, UUID taskUuid);
-    void deleteProjectByUuid(UUID uuid);
+    void updateProjectByUuid(String uuid, Project project);
+    Project updateIsDoneProjectByUuid(String uuid, Boolean isDone);
+    Project addNewTaskByUuid(String uuid, Task task);
+    Project deleteATaskfromProjectByUuid(String projectUuid, String taskUuid);
+    void deleteProjectByUuid(String uuid);
     List<Project> getAllProject();
-    Project getProjectByUuid(UUID uuid);
+    Project getProjectByUuid(String uuid);
 
 }

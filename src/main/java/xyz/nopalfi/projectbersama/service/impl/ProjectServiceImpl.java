@@ -9,10 +9,10 @@ import xyz.nopalfi.projectbersama.errorhandler.UuidNotFoundException;
 import xyz.nopalfi.projectbersama.repository.ProjectRepository;
 import xyz.nopalfi.projectbersama.repository.TaskRepository;
 import xyz.nopalfi.projectbersama.service.ProjectService;
+import xyz.nopalfi.projectbersama.utils.UUIDConverter;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -35,9 +35,9 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void updateProjectByUuid(UUID uuid, Project project) {
-        if (repository.getByUuid(uuid).isPresent()) {
-            Project oldProject = repository.getByUuid(uuid).get();
+    public void updateProjectByUuid(String uuid, Project project) {
+        if (repository.getByUuid(UUIDConverter.convert(uuid)).isPresent()) {
+            Project oldProject = repository.getByUuid(UUIDConverter.convert(uuid)).get();
             oldProject.setProjectModified(Instant.now());
             oldProject.setTitle(project.getTitle());
             oldProject.setDescription(project.getDescription());
@@ -46,52 +46,48 @@ public class ProjectServiceImpl implements ProjectService {
             oldProject.setTeams(project.getTeams());
             repository.save(oldProject);
         } else {
-            throw new UuidNotFoundException("Project: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND);
+            throw new UuidNotFoundException("Project: " + uuid + " not found", HttpStatus.NOT_FOUND);
         }
     }
 
     @Override
-    public void updateIsDoneProjectByUuid(UUID uuid, Project project, Boolean isDone) {
-        if (repository.getByUuid(uuid).isPresent()) {
-            Project oldProject = repository.getByUuid(uuid).get();
+    public Project updateIsDoneProjectByUuid(String uuid, Boolean isDone) {
+        if (repository.getByUuid(UUIDConverter.convert(uuid)).isPresent()) {
+            Project oldProject = repository.getByUuid(UUIDConverter.convert(uuid)).get();
             oldProject.setIsDone(isDone);
-            repository.save(oldProject);
+            return repository.save(oldProject);
         } else {
-            throw new UuidNotFoundException("Project: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND);
+            throw new UuidNotFoundException("Project: " + uuid + " not found", HttpStatus.NOT_FOUND);
         }
     }
 
 
     @Override
-    public Project addNewTaskByUuid(UUID uuid, Task task) {
-        if (repository.getByUuid(uuid).isPresent()) {
-            Project project = repository.getByUuid(uuid).get();
+    public Project addNewTaskByUuid(String uuid, Task task) {
+        if (repository.getByUuid(UUIDConverter.convert(uuid)).isPresent()) {
+            Project project = repository.getByUuid(UUIDConverter.convert(uuid)).get();
             project.addTask(task);
             return repository.save(project);
-        }else {
-            throw new UuidNotFoundException("Project: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND);
+        } else {
+            throw new UuidNotFoundException("Project: " + uuid + " not found", HttpStatus.NOT_FOUND);
         }
     }
 
     @Override
-    public Project deleteATaskfromProjectByUuid(UUID projectUuid, UUID taskUuid) {
-        if (repository.getByUuid(projectUuid).isPresent()) {
-            Project project = repository.getByUuid(projectUuid).get();
-            Task task = taskRepository.findByUuid(taskUuid).orElseThrow(() -> new UuidNotFoundException("Task: "+taskUuid+" not found.", HttpStatus.NOT_FOUND));
-            project.deleteTask(task);
-            return repository.save(project);
-        }else {
-            throw new UuidNotFoundException("Project: "+projectUuid.toString()+" not found", HttpStatus.NOT_FOUND);
-        }
+    public Project deleteATaskfromProjectByUuid(String projectUuid, String taskUuid) {
+        Project project = repository.getByUuid(UUIDConverter.convert(projectUuid)).orElseThrow(() -> new UuidNotFoundException("Project: "+projectUuid+" not found.", HttpStatus.NOT_FOUND));
+        Task task = taskRepository.findByUuid(UUIDConverter.convert(taskUuid)).orElseThrow(() -> new UuidNotFoundException("Task: "+taskUuid+" not found.", HttpStatus.NOT_FOUND));
+        project.deleteTask(task);
+        return repository.save(project);
     }
 
     @Override
-    public void deleteProjectByUuid(UUID uuid) {
-        if (repository.getByUuid(uuid).isPresent()) {
-            Project project = repository.getByUuid(uuid).get();
+    public void deleteProjectByUuid(String uuid) {
+        if (repository.getByUuid(UUIDConverter.convert(uuid)).isPresent()) {
+            Project project = repository.getByUuid(UUIDConverter.convert(uuid)).get();
             repository.delete(project);
         }else {
-            throw new UuidNotFoundException("Project: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND);
+            throw new UuidNotFoundException("Project: "+uuid+" not found", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -101,11 +97,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project getProjectByUuid(UUID uuid) {
-        if (repository.getByUuid(uuid).isPresent()) {
-            return repository.getByUuid(uuid).get();
+    public Project getProjectByUuid(String uuid) {
+        if (repository.getByUuid(UUIDConverter.convert(uuid)).isPresent()) {
+            return repository.getByUuid(UUIDConverter.convert(uuid)).get();
         }else {
-            throw new UuidNotFoundException("Project: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND);
+            throw new UuidNotFoundException("Project: "+uuid+" not found", HttpStatus.NOT_FOUND);
         }
     }
 }

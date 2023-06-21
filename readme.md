@@ -22,4 +22,4 @@ ProyekBersama is licensed under the MIT License. See our LICENSE.md file for mor
 If you have any questions or feedback about ProyekBersama, please email us at contact@proyekbersama.com or visit our website at proyekbersama.com.
 
 ## Note
-Is not ready yet, currently building the API
+It's not ready yet, currently implementing Spring Security
