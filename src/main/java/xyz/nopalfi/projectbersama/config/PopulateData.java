@@ -1,7 +1,8 @@
 package xyz.nopalfi.projectbersama.config;
 
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import xyz.nopalfi.projectbersama.entity.Project;
 import xyz.nopalfi.projectbersama.entity.Task;
@@ -24,18 +25,20 @@ public class PopulateData implements CommandLineRunner {
     private final ProjectRepository projectRepository;
     private final TaskRepository taskRepository;
     private final TeamRepository teamRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public PopulateData(UserRepository repository, ProjectRepository projectRepository, TaskRepository taskRepository, TeamRepository teamRepository) {
+    public PopulateData(UserRepository repository, ProjectRepository projectRepository, TaskRepository taskRepository, TeamRepository teamRepository, PasswordEncoder passwordEncoder) {
         this.projectRepository = projectRepository;
         this.repository = repository;
         this.taskRepository = taskRepository;
         this.teamRepository = teamRepository;
+        this.passwordEncoder = passwordEncoder;
     }
     @Override
     public void run(String... args) {
         User user1 = User.builder()
                 .username("user1")
-                .password("pass1")
+                .password(passwordEncoder.encode("pass1"))
                 .email("email@email.com")
                 .firstName("name1")
                 .role(Role.USER)
