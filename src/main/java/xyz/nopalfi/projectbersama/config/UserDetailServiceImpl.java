@@ -1,27 +1,26 @@
-package xyz.nopalfi.projectbersama.service.impl;
+package xyz.nopalfi.projectbersama.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import xyz.nopalfi.projectbersama.entity.MyUserPrincipal;
-import xyz.nopalfi.projectbersama.entity.User;
 import xyz.nopalfi.projectbersama.repository.UserRepository;
 
 @Service
 public class UserDetailServiceImpl implements UserDetailsService {
 
-    private final UserRepository repository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserDetailServiceImpl(UserRepository repository) {
-        this.repository = repository;
+    public UserDetailServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = repository.getByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username: "+username+" not found"));
-        return new MyUserPrincipal(user);
+        return userRepository.getByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
     }
 }

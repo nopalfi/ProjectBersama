@@ -45,7 +45,7 @@ public class PopulateData implements CommandLineRunner {
                 .build();
         User user2 = User.builder()
                 .username("johndoe")
-                .password("password")
+                .password(passwordEncoder.encode("johndoe"))
                 .firstName("John")
                 .secondName("Doe")
                 .email("johndoe@example.com")
