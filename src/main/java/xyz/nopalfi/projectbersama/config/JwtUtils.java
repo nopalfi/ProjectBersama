@@ -11,6 +11,8 @@ import xyz.nopalfi.projectbersama.entity.User;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -19,13 +21,17 @@ public class JwtUtils {
     private String jwtSecret;
 
     public String generateToken(Authentication authentication) {
+        Map<String, Object> headerParams = new HashMap<>();
+        headerParams.put("tpye","JWT");
+        headerParams.put("specialWord", "DEEZ NUTS");
         User user = (User) authentication.getPrincipal();
-        int jwExpiration = 3600;
+        int jwExpiration = 86400000;
         return Jwts.builder()
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwExpiration))
                 .signWith(key(), SignatureAlgorithm.HS256)
+                .setHeaderParams(headerParams)
                 .compact();
     }
 

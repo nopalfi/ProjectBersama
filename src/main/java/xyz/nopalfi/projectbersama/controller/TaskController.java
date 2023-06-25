@@ -3,6 +3,7 @@ package xyz.nopalfi.projectbersama.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import xyz.nopalfi.projectbersama.entity.CustomResponseBody;
 import xyz.nopalfi.projectbersama.entity.Task;
@@ -24,6 +25,7 @@ public class TaskController {
     }
 
     @GetMapping("/")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CustomResponseBody<List<Task>>> getAllTasks() {
         CustomResponseBody<List<Task>> response = new CustomResponseBody<>();
         response.setMessage("Get All Tasks");
@@ -33,6 +35,7 @@ public class TaskController {
     }
 
     @GetMapping("/task/{uuid}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CustomResponseBody<Task>> getTaskByUUid(@PathVariable String uuid) {
         CustomResponseBody<Task> response = new CustomResponseBody<>();
         response.setMessage("Get A Task");
@@ -41,6 +44,7 @@ public class TaskController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @PutMapping("/task/{uuid}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CustomResponseBody<Task>> updateTaskByUuid(@PathVariable String uuid, @RequestBody Task task) {
         CustomResponseBody<Task> response = new CustomResponseBody<>();
         response.setMessage("Updated A Task");
@@ -49,6 +53,7 @@ public class TaskController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @DeleteMapping("/task/{uuid}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CustomResponseBody<String>> deleteTaskByUuid(@PathVariable String uuid) {
         taskService.deleteTaskByUuid(uuid);
         CustomResponseBody<String> response = new CustomResponseBody<>();
@@ -58,6 +63,7 @@ public class TaskController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @GetMapping("/task/project/{uuid}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CustomResponseBody<List<Task>>> getTasksByProjectUuid(@PathVariable String uuid) {
         CustomResponseBody<List<Task>> response = new CustomResponseBody<>();
         response.setMessage("Deleted A Task");
@@ -67,6 +73,7 @@ public class TaskController {
     }
 
     @GetMapping("/task/owner/{uuid}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CustomResponseBody<List<Task>>> getTasksByOwnerUuid(@PathVariable String uuid) {
         try {
             CustomResponseBody<List<Task>> response = new CustomResponseBody<>();

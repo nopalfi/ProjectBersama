@@ -1,5 +1,6 @@
 package xyz.nopalfi.projectbersama.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,8 @@ import xyz.nopalfi.projectbersama.service.impl.UserServiceImpl;
 
 import java.time.Instant;
 
+@Slf4j
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/api/v1/auth")
 @RestController
 public class AuthenticationController {

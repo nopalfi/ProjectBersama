@@ -2,6 +2,7 @@ package xyz.nopalfi.projectbersama.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import xyz.nopalfi.projectbersama.entity.CustomResponseBody;
 import xyz.nopalfi.projectbersama.entity.Team;
@@ -22,6 +23,7 @@ public class TeamController {
     }
 
     @GetMapping("/")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CustomResponseBody<List<Team>>> getAllTeams() {
         CustomResponseBody<List<Team>> response = new CustomResponseBody<>();
         response.setMessage("Get All Teams");
@@ -30,6 +32,7 @@ public class TeamController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @PostMapping("/")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CustomResponseBody<Team>> newTeam(@RequestBody Team team) {
         CustomResponseBody<Team> response = new CustomResponseBody<>();
         response.setMessage("Created A New Team");
@@ -39,6 +42,7 @@ public class TeamController {
     }
 
     @GetMapping("/team/users/{uuid}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CustomResponseBody<List<User>>> getAllUsersInTeamByUuid(@PathVariable String uuid) {
         CustomResponseBody<List<User>> response = new CustomResponseBody<>();
         response.setMessage("Get All Users In A Team");
@@ -48,6 +52,7 @@ public class TeamController {
     }
 
     @GetMapping("/team/owner/{uuid}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CustomResponseBody<User>> getUserTeamOwnerUuid(@PathVariable String uuid) {
         CustomResponseBody<User> response = new CustomResponseBody<>();
         response.setMessage("Get A User Team Owner");
@@ -57,6 +62,7 @@ public class TeamController {
     }
 
     @DeleteMapping("/team/{uuid}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CustomResponseBody<String>> deleteTeamByUuid(@PathVariable String uuid) {
         CustomResponseBody<String> response = new CustomResponseBody<>();
         teamService.deleteTeamByUuid(uuid);
