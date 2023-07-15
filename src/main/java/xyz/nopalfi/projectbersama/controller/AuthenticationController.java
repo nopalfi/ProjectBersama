@@ -28,6 +28,7 @@ public class AuthenticationController {
     private final JwtUtils jwtUtils;
     private final PasswordEncoder encoder;
 
+
     @Autowired
     public AuthenticationController(AuthenticationManager authenticationManager, UserServiceImpl userService, JwtUtils jwtUtils, PasswordEncoder encoder) {
         this.authenticationManager = authenticationManager;

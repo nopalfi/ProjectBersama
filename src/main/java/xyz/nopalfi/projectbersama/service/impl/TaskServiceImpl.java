@@ -36,7 +36,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task newTask(Task task) {
+    public Task save(Task task) {
         Instant now = Instant.now();
         task.setTaskCreated(now);
         task.setTaskModified(now);
@@ -44,7 +44,16 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task updateTaskByUuid(String uuid, Task task) {
+    public Task get(String uuid) {
+        if (repository.findByUuid(UUIDConverter.convert(uuid)).isPresent()) {
+            return repository.findByUuid(UUIDConverter.convert(uuid)).get();
+        } else {
+            throw new UuidNotFoundException("Task with UUID: "+uuid+" not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Override
+    public void update(String uuid, Task task) {
         if (repository.findByUuid(UUIDConverter.convert(uuid)).isPresent()) {
             Task oldTask = repository.findByUuid(UUIDConverter.convert(uuid)).get();
             oldTask.setTask(task.getTask());
@@ -52,14 +61,14 @@ public class TaskServiceImpl implements TaskService {
             oldTask.setOwner(task.getOwner());
             oldTask.setDeadline(task.getDeadline());
             oldTask.setIsDone(task.getIsDone());
-            return repository.save(oldTask);
+            repository.save(oldTask);
         } else {
-            throw new UuidNotFoundException("Task with UUID: "+uuid.toString()+" not found", HttpStatus.NOT_FOUND);
+            throw new UuidNotFoundException("Task with UUID: "+uuid+" not found", HttpStatus.NOT_FOUND);
         }
     }
 
     @Override
-    public void deleteTaskByUuid(String uuid) {
+    public void delete(String uuid) {
         if (repository.findByUuid(UUIDConverter.convert(uuid)).isPresent()) {
             Task task = repository.findByUuid(UUIDConverter.convert(uuid)).get();
             repository.delete(task);
@@ -70,7 +79,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> getTasksByProjectUuid(String uuid) {
-        Project project = projectService.getProjectByUuid(uuid);
+        Project project = projectService.get(uuid);
         return project.getTasks();
     }
 
@@ -79,15 +88,6 @@ public class TaskServiceImpl implements TaskService {
         if (userRepository.getByUuid(UUIDConverter.convert(uuid)).isPresent()) {
             User user = userRepository.getByUuid(UUIDConverter.convert(uuid)).get();
             return user.getTasks();
-        } else {
-            throw new UuidNotFoundException("Task with UUID: "+uuid+" not found", HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @Override
-    public Task getTaskByUuid(String uuid) {
-        if (repository.findByUuid(UUIDConverter.convert(uuid)).isPresent()) {
-            return repository.findByUuid(UUIDConverter.convert(uuid)).get();
         } else {
             throw new UuidNotFoundException("Task with UUID: "+uuid+" not found", HttpStatus.NOT_FOUND);
         }

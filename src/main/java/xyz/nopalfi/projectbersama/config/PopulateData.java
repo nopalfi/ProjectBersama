@@ -54,6 +54,7 @@ public class PopulateData implements CommandLineRunner {
         repository.saveAll(List.of(user1, user2));
 
         Team team1 = Team.builder()
+                .users(List.of(user1, user2))
                 .teamOwner(user1)
                 .build();
 

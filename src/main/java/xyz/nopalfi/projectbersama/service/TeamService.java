@@ -5,12 +5,9 @@ import xyz.nopalfi.projectbersama.entity.User;
 
 import java.util.List;
 
-public interface TeamService {
+public interface TeamService extends DaoService<Team> {
 
-    List<Team> getAllTeams();
-    Team newTeam(Team team);
     List<User> getAllUsersInTeamUuid(String uuid);
     User getUserTeamOwnerUuid(String uuid);
-    void deleteTeamByUuid(String uuid);
 
 }

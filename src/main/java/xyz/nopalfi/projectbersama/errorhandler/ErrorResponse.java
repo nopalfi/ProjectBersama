@@ -10,4 +10,6 @@ public class ErrorResponse {
     private String message;
     private HttpStatus httpStatus;
     private long timestamp;
+    private String path;
+    private String apiVersion;
 }
