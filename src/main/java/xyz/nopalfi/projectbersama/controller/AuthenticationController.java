@@ -1,7 +1,9 @@
 package xyz.nopalfi.projectbersama.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +25,8 @@ import java.time.Instant;
 @RestController
 public class AuthenticationController {
 
+    @Value("${api.version}")
+    private String apiVersion;
     private final AuthenticationManager authenticationManager;
     private final UserServiceImpl userService;
     private final JwtUtils jwtUtils;
@@ -38,7 +42,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<CustomResponseBody<String>> authenticate(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<CustomResponseBody<String>> authenticate(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateToken(authentication);
@@ -46,6 +50,8 @@ public class AuthenticationController {
         response.setData(jwt);
         response.setMessage("Authenticated Successfully");
         response.setTimestamp(Instant.now().getEpochSecond());
+        response.setPath(request.getRequestURI());
+        response.setApiVersion(apiVersion);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
